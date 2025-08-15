@@ -13,7 +13,7 @@ class TaskController extends Controller implements HasMiddleware
 
     public static function middleware(): array
     {
-        return [new Middleware('auth:sanctum', except: ['index', 'show'])];
+        return [new Middleware('auth:sanctum')];
     }
 
     /**
@@ -21,7 +21,7 @@ class TaskController extends Controller implements HasMiddleware
      */
     public function index(Request $request)
     {
-        return Task::all();
+        return $request->user()->tasks();
     }
 
     /**
@@ -43,6 +43,7 @@ class TaskController extends Controller implements HasMiddleware
      */
     public function show(Task $task)
     {
+        Gate::authorize('view', $task);
         return $task;
     }
 
